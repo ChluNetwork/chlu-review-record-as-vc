@@ -1,0 +1,15 @@
+{
+  "currency_symbol": "BTC",
+  "amount": 0.001,
+  "key_location": "Qm...",
+  "chlu_version": "0.1.0",
+  "signature": {
+    "type": "LinkedDataSignature2015",
+    "created": "2016-06-18T21:19:10Z",
+    "creator": "vm pub key",
+    "domain": "json-ld.org",
+    "nonce": "97639n251",
+    "signatureValue": "..."
+  },
+  "vendor_key_location": "Qm..."
+}
