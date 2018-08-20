@@ -1,5 +1,10 @@
+const sinon = require('sinon')
 const expect = require('chai').expect
 const ReviewRecord = require('../src/review_record')
+
+var jsonld = require('jsonld');
+var jsig = require('jsonld-signatures');
+jsig.use('jsonld', jsonld);
 
 const chluDID = {"@context":"https://w3id.org/did/v1","id":"did:chlu:B6BrdJTTCzu9m52rKVZnitaLPNB6GhTWn6MkPJhrTksU","publicKey":[{"id":"did:chlu:B6BrdJTTCzu9m52rKVZnitaLPNB6GhTWn6MkPJhrTksU#keys-1","type":"Ed25519VerificationKey2018","owner":"did:chlu:B6BrdJTTCzu9m52rKVZnitaLPNB6GhTWn6MkPJhrTksU","publicKeyBase58":"B6BrdJTTCzu9m52rKVZnitaLPNB6GhTWn6MkPJhrTksU","privateKeyBase58":"28dDPywX1z4Sv7ksWthdh6yGN6ua42YER34mN5Q3dLqosLEH4L3s5HSvRtdEDqNsvU33Ug84gfkJpHpTUZyga7bx"}],"authentication":[{"type":"Ed25519SignatureAuthentication2018","publicKey":"did:chlu:B6BrdJTTCzu9m52rKVZnitaLPNB6GhTWn6MkPJhrTksU#keys-1"}]}
 
@@ -12,30 +17,15 @@ describe('ReviewRecord', () => {
   })
 
   it('Signs a review record, returning a verifiable claim', async () => {
-    try {
-      const review = {
-        ReviewBody: "blah",
-        ReviewRating: 5
-      }  
-      
-      const vc = await new ReviewRecord().sign(chluDID, vendorDID, review)
-      
-      expect(vc.subject).to.equal(vendorDID.id)
-      expect(vc.issuer).to.equal(chluDID.id)
-      expect(vc.claim).to.deep.equal(review)
-      expect(vc['sec:proof']).not.to.be.undefined
-      expect(vc['sec:proof']).not.to.be.undefined
-      console.log('done')
-    } catch (err) {
-      console.log('error')
-      console.log(err)
-    }
+    const review = {
+      ReviewBody: "blah",
+      ReviewRating: 5
+    }  
+    
+    var jsigSpy = sinon.stub(jsig, "sign")
+    const vc = await new ReviewRecord().sign(chluDID, vendorDID, review)
+    sinon.assert.called(jsig.sign);
   })
 
-  // it('Verifies a verifiable claim', async () => { 
-  //   const claim = await new Review().verify(chluDID, signedVC)
-
-  //   console.log(claim)
-  // })
-
+  // TODO: Add a test to check verify
 })

@@ -4,7 +4,7 @@ var jsig = require('jsonld-signatures');
 jsig.use('jsonld', jsonld);
 
 class ReviewRecord {
-
+  
   /**
    * Create review record, wrap it in a VC and sign with did
    *
@@ -13,7 +13,7 @@ class ReviewRecord {
    * @param did, the DID to sign the VC with (should be chlu-did)
    *
    * @return review as VC, signed. Or undefined. 
-   */
+   */  
   async sign(issuerDID, subjectDID, review) {
     const privateKeyBase58 = issuerDID.publicKey[0].privateKeyBase58
     const vc = {
